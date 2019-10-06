@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2nd of October workshop</title>
+    <link rel="stylesheet" href="style.css"></link>
+</head>
+<body>
+    <section class="ctrl-panel">
+        <button class="btn btn-green">Add new item</button>
+    </section>
+    <section class="items">
+        <h2>List of to-do items</h2>
+        <ul class="item-list">
+            <li>There's nothing to do</li>
+        </ul>
+    </section>
+    <section class="popup">
+        <div class="popup-form">
+            <div class="popup-title">
+                <h2 id="popupTitle">Title</h2>
+                <button class="btn btn-red btn-close float-right">&times;</button>
+            </div>
+            <div class="popup-content">
+                <form action="/" method="POST">
+                    <input type="hidden" name="itemId" id="itemId" value="" />
+                    <input type="text" pattern="^[0-9A-Za-zА-Яа-яЁё\s]+$" id="title" name="title" maxlength="20" value="" placeholder="Title *" required />
+                    <input type="text" id="description" name="description" value="" placeholder="Description" />
+                    <select name="priority" id="priority" required>
+                        <option disabled selected>Priority *</option>
+                        <option class="low" value="low">low</option>
+                        <option class="medium" value="medium">medium</option>
+                        <option class="high" value="high">high</option>
+                    </select>
+                    <div class="input-wrap">
+                        <input type="date" value="" id="date" name="date" />
+                        <label for="date">Deadline (date-time)</label>
+                    </div>
+                    <div class="form-footer">
+                        <button class="btn btn-red">Cancel</button>
+                        <button class="btn btn-green float-right">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script src="script.js"></script>
+</body>
+</html>

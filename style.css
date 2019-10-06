@@ -1,0 +1,157 @@
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+.btn {
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    color: #f4f4f4;
+    padding: 5px 10px;
+    margin-right: 15px;
+    transition: all .3s;
+}
+.btn:last-child {
+    margin-right: 0;;
+}
+.btn-green {
+    background: #1f861f;
+}
+.btn-green:hover {
+    background: #007000;
+}
+.btn-red {
+    background: #f63f3f;
+}
+.btn-red:hover {
+    background: #ff0000;
+}
+.btn-yellow {
+    background: #ffa754;
+}
+.btn-yellow:hover {
+    background: #ff7b00;
+}
+.btn-blue {
+    background: #3939ff;
+}
+.btn-blue:hover {
+    background: #0000ff;
+}
+.btn-close {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    padding: 0;
+    transition: all .3s;
+}
+.btn-close:hover {
+    color: #000;
+}
+.float-right {
+    float: right;
+}
+.float-left {
+    float: left;
+}
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 15px;
+}
+li.item {
+    display: inline-block;
+    vertical-align: top;
+    width: 320px;
+    max-width: 100%;
+    border-radius: 8px;
+    background: #ccc;
+    padding: 0 15px 20px;
+    margin: 0 20px 20px 0;
+}
+li.item-completed h2,
+li.item-completed p {
+    text-decoration: line-through
+}
+li.item-completed .btn-yellow {
+    display: none;
+}
+.low {
+    color: blue;
+}
+.medium {
+    color: #ffa754;
+}
+.high {
+    color: red;
+}
+.popup {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.6);
+    z-index: 4;
+}
+.popup.shown {
+    display: block;
+    animation: showPopup .5s;
+}
+.popup-form {
+    border-radius: 8px;
+    background: #ccc;
+    padding: 15px;
+    width: max-content;
+    height: max-content;
+    margin: 10% auto 0;
+}
+.popup-form h2 {
+    display: inline-block;
+    margin-top: 0;
+}
+input, select {
+    display: block;
+    width: 300px;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 4px;
+    border: none;
+    background: #fff;
+    margin-bottom: 15px;
+    padding: 0 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+input::placeholder,
+input::-moz-placeholder,
+input::-webkit-input-placeholder {
+    color: #000;
+    opacity: 1;
+}
+select::after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: #000000;
+}
+.input-wrap {
+    position: relative;
+}
+label[for="date"] {
+    position: absolute;
+    height: 23px;
+    line-height: 23px;
+    top: 2px;
+    left: 5px;
+    font-size: 14px;
+    background: #fff;
+}
+
+@keyframes showPopup {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
