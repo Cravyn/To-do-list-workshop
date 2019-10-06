@@ -52,11 +52,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 break;
 
             case target.classList.contains("btn-blue"):
-                if(parent.classList.toggle("item-completed")) {
-                    target.textContent = "Mark as undone";
-                } else {
-                    target.textContent = "Mark as done";
-                }
+                    if(changeListItemStatus(parent)) {
+                        target.textContent = "Mark as undone";
+                    } else {
+                        target.textContent = "Mark as done";
+                    }
                 break;
 
             default:
@@ -72,6 +72,8 @@ document.addEventListener("DOMContentLoaded", function() {
             obj[field.name] = field.value;
             return obj;
         }, {});
+
+        formData.isDone = false;
 
         if(form.querySelector("#itemId")) {
             editListItem(formData, formData.itemId);
@@ -155,7 +157,11 @@ document.addEventListener("DOMContentLoaded", function() {
         btnYellow.textContent = "Edit";
         
         let btnBlue = document.createElement("button");
-        btnBlue.textContent = "Mark as done";
+        if(data.isDone) {
+            btnBlue.textContent = "Mark as undone";
+        } else {
+            btnBlue.textContent = "Mark as done";
+        }
         
         newItem.append(btnRed);
         newItem.append(btnYellow);
@@ -165,7 +171,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         newItem.setAttribute('data-id', id);
 
-        newItem.className   = "item";
+        if(data.isDone) {
+            newItem.className = "item item-completed";
+        } else {
+            newItem.className = "item";
+        }
         btnRed.className    = "btn btn-red";
         btnYellow.className = "btn btn-yellow";
         btnBlue.className   = "btn btn-blue float-right";
@@ -228,6 +238,20 @@ document.addEventListener("DOMContentLoaded", function() {
             let textEmpty = document.createElement("li");
             textEmpty.textContent = "There's nothing to do";
             list.append(textEmpty);
+        }
+    }
+
+    function changeListItemStatus(item) {
+        if(item.classList.toggle("item-completed")) {
+            savedItems[+item.getAttribute("data-id")].isDone = true;
+            localStorage.setItem("savedItems", JSON.stringify(savedItems));
+
+            return true;
+        } else {
+            savedItems[+item.getAttribute("data-id")].isDone = false;
+            localStorage.setItem("savedItems", JSON.stringify(savedItems));
+
+            return false;
         }
     }
     
