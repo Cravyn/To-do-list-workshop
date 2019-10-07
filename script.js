@@ -8,10 +8,8 @@ document.addEventListener("DOMContentLoaded", function() {
     //load saved items if any
     if(localStorage.length) {
         savedItems = JSON.parse(localStorage.getItem('savedItems'));
-
-        for (let [index, val] of savedItems.entries()) {
-            createListItem(val, index);
-        }
+        
+        sortSavedItems();
     }
 
     //popup opening
@@ -78,8 +76,10 @@ document.addEventListener("DOMContentLoaded", function() {
         if(form.querySelector("#itemId").value) {
             editListItem(formData, formData.itemId);
             savedItems[formData.itemId] = formData;
+            sortSavedItems();
         } else {
             createListItem(formData, savedItems.push(formData) - 1);
+            sortSavedItems();
         }
 
         localStorage.setItem("savedItems", JSON.stringify(savedItems));
@@ -87,6 +87,22 @@ document.addEventListener("DOMContentLoaded", function() {
         closePopup();
 
         form.reset();
+    });
+
+    // search handler
+    document.getElementById("search").addEventListener("input", (e) => {
+        let itemsToShow = savedItems.filter(item => Object.values(item).toString().indexOf(e.target.value) > -1 );
+
+        console.log(itemsToShow);
+        [...list.getElementsByClassName("item")].forEach(item => {
+            console.log(itemsToShow.includes(item));
+            if(!itemsToShow.includes(item.getAttribute("data-id"))) {
+                item.style.display = "none";
+            } else {
+                item.style.display = "inline-block";
+            }
+        });
+        
     });
 
     function closePopup() {
@@ -115,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function createListItem(data, id) {
-        if(!list.firstElementChild.classList.contains("item")) {
+        if(list.firstElementChild && !list.firstElementChild.classList.contains("item")) {
             list.firstElementChild.remove();
         }
 
@@ -219,6 +235,8 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             date.remove();
         }
+        
+        sortSavedItems();
     }
 
     function removeListItem(item) {
@@ -244,15 +262,62 @@ document.addEventListener("DOMContentLoaded", function() {
     function changeListItemStatus(item) {
         if(item.classList.toggle("item-completed")) {
             savedItems[+item.getAttribute("data-id")].isDone = true;
-            localStorage.setItem("savedItems", JSON.stringify(savedItems));
-
+            sortSavedItems();
+            
             return true;
         } else {
             savedItems[+item.getAttribute("data-id")].isDone = false;
-            localStorage.setItem("savedItems", JSON.stringify(savedItems));
-
+            sortSavedItems();
+            
             return false;
         }
+    }
+
+    function reloadItemList() {
+        list.innerHTML = '';
+
+        for (let [index, val] of savedItems.entries()) {
+            createListItem(val, index);
+        }
+    }
+
+    function sortSavedItems() {
+        savedItems.sort((a, b) => {
+            if(a.isDone && !b.isDone) {
+                return 1;
+            } else if(b.isDone && !a.isDone) { 
+                return -1;
+            } else if(a.isDone && b.isDone || (!a.isDone && !b.isDone)) {
+                let aPriority = 0;
+                let bPriority = 0;
+                switch(a.priority) {
+                    case "medium":
+                        aPriority = 1;
+                        break;
+                    case "high":
+                        aPriority = 2;
+                        break;
+                }
+                switch(b.priority) {
+                    case "medium":
+                        bPriority = 1;
+                        break;
+                    case "high":
+                        bPriority = 2;
+                        break;
+                }
+
+                if(aPriority > bPriority) return -1;
+                if(aPriority < bPriority) return 1;
+                return 0;                
+            }
+            if(a.isDone) return 1;
+            if(b.isDone) return -1;
+        });
+
+       localStorage.setItem("savedItems", JSON.stringify(savedItems));
+
+       reloadItemList();
     }
     
     function preloadItemData(item) {
