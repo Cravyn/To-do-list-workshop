@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         formData.isDone = false;
 
-        if(form.querySelector("#itemId")) {
+        if(form.querySelector("#itemId").value) {
             editListItem(formData, formData.itemId);
             savedItems[formData.itemId] = formData;
         } else {
