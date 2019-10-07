@@ -1,3 +1,12 @@
+// setting favicon
+document.head || (document.head = document.getElementsByTagName('head')[0]);
+
+var link = document.createElement('link');
+link.id = 'favicon';
+link.rel = 'shortcut icon';
+link.href = "favicon.svg";
+document.head.appendChild(link);
+
 document.addEventListener("DOMContentLoaded", function() {
     let savedItems = [];
     let list = document.querySelector(".item-list");
@@ -5,14 +14,14 @@ document.addEventListener("DOMContentLoaded", function() {
     let form = popup.querySelector("form");
     let dateInput = form.querySelector('#date');
     
-    //load saved items if any
+    // load saved items if any
     if(localStorage.length) {
         savedItems = JSON.parse(localStorage.getItem('savedItems'));
         
         sortSavedItems();
     }
 
-    //popup opening
+    // popup opening
     document.querySelector(".ctrl-panel button").addEventListener("click", () => {
         resetForm();
 
@@ -21,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
         popup.classList.add('shown');
     });
 
-    //popup closing
+    // popup closing
     popup.addEventListener("click", closePopup);
     document.querySelector(".btn-close").addEventListener("click", closePopup);    
     document.querySelector(".form-footer .btn-red").addEventListener("click", (e) => { 
@@ -30,12 +39,12 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     popup.firstElementChild.addEventListener("click", (e) => e.stopPropagation());    
 
-    //date label "placeholder" toggle
+    // date label "placeholder" toggle
     dateInput.addEventListener("change", () => {
         checkDateInput();
     });
 
-    //list item controls
+    // list item controls
     list.addEventListener("click", (e) => {
         let target = e.target;
         let parent = target.parentElement;
@@ -62,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
     
-    //form submit
+    // form submit
     form.addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -91,12 +100,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // search handler
     document.getElementById("search").addEventListener("input", (e) => {
-        let itemsToShow = savedItems.filter(item => Object.values(item).toString().indexOf(e.target.value) > -1 );
+        let itemsToShow =[];
+        savedItems.reduce((prev, item, index) => {
+            if(Object.values(item).toString().toLowerCase().indexOf(e.target.value.toLowerCase()) > -1) {
+                itemsToShow.push(index);
+            }
+        }, []);
 
-        console.log(itemsToShow);
         [...list.getElementsByClassName("item")].forEach(item => {
-            console.log(itemsToShow.includes(item));
-            if(!itemsToShow.includes(item.getAttribute("data-id"))) {
+            if(!itemsToShow.includes(+item.getAttribute("data-id"))) {
                 item.style.display = "none";
             } else {
                 item.style.display = "inline-block";
@@ -216,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 description.className = "item-description";
             }
-        } else {
+        } else if(description) {
             description.remove();
         }
         
@@ -232,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 date.className = "item-deadline";
             }
-        } else {
+        } else if(date) {
             date.remove();
         }
         
@@ -243,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function() {
         savedItems.splice(+item.getAttribute("data-id"), 1);
         localStorage.setItem("savedItems", JSON.stringify(savedItems));
 
-        //resetting ids
+        // resetting ids
         let nextItem = item.nextElementSibling;        
         item.remove();
 
@@ -309,10 +321,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 if(aPriority > bPriority) return -1;
                 if(aPriority < bPriority) return 1;
-                return 0;                
+                return 0;
             }
-            if(a.isDone) return 1;
-            if(b.isDone) return -1;
         });
 
        localStorage.setItem("savedItems", JSON.stringify(savedItems));

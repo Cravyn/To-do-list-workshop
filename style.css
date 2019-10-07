@@ -125,6 +125,10 @@ input, select {
     box-sizing: border-box;
     font-size: 14px;
 }
+input#search {
+    display: inline-block;
+    border: 1px solid;
+}
 input::placeholder,
 input::-moz-placeholder,
 input::-webkit-input-placeholder {
